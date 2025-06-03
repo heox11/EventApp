@@ -142,28 +142,63 @@ namespace EventManagement.API.Controllers
                 return BadRequest("Cannot modify participants for past events");
             }
 
-            // Validate required fields
-            if (string.IsNullOrEmpty(dto.FirstName) || 
-                string.IsNullOrEmpty(dto.LastName) || 
-                string.IsNullOrEmpty(dto.PersonalCode))
+            // Validate fields based on participant type
+            if (existingParticipant.Type == ParticipantType.Individual)
             {
-                return BadRequest("First name, last name, and personal code are required");
+                if (string.IsNullOrEmpty(dto.FirstName) || 
+                    string.IsNullOrEmpty(dto.LastName) || 
+                    string.IsNullOrEmpty(dto.PersonalCode))
+                {
+                    return BadRequest("First name, last name, and personal code are required for individual participants");
+                }
+
+                if (!IsValidEstonianPersonalCode(dto.PersonalCode))
+                {
+                    return BadRequest("Invalid Estonian personal code");
+                }
+
+                // Clear company fields
+                existingParticipant.CompanyName = string.Empty;
+                existingParticipant.RegistrationCode = string.Empty;
+                existingParticipant.NumberOfParticipants = null;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(dto.CompanyName) || 
+                    string.IsNullOrEmpty(dto.RegistrationCode) || 
+                    !dto.NumberOfParticipants.HasValue)
+                {
+                    return BadRequest("Company name, registration code, and number of participants are required for company participants");
+                }
+
+                if (dto.RegistrationCode.Length != 8 || !dto.RegistrationCode.All(char.IsDigit))
+                {
+                    return BadRequest("Registration code must be 8 digits");
+                }
+
+                // Clear individual fields
+                existingParticipant.FirstName = string.Empty;
+                existingParticipant.LastName = string.Empty;
+                existingParticipant.PersonalCode = string.Empty;
             }
 
-            if (!IsValidEstonianPersonalCode(dto.PersonalCode))
-            {
-                return BadRequest("Invalid Estonian personal code");
-            }
-
-            // Update only the fields that can be changed
-            existingParticipant.FirstName = dto.FirstName;
-            existingParticipant.LastName = dto.LastName;
-            existingParticipant.PersonalCode = dto.PersonalCode;
-            existingParticipant.CompanyName = dto.CompanyName;
-            existingParticipant.RegistrationCode = dto.RegistrationCode;
-            existingParticipant.NumberOfParticipants = dto.NumberOfParticipants;
+            // Update common fields
             existingParticipant.PaymentMethod = dto.PaymentMethod;
             existingParticipant.AdditionalInfo = dto.AdditionalInfo;
+
+            // Update type-specific fields
+            if (existingParticipant.Type == ParticipantType.Individual)
+            {
+                existingParticipant.FirstName = dto.FirstName;
+                existingParticipant.LastName = dto.LastName;
+                existingParticipant.PersonalCode = dto.PersonalCode;
+            }
+            else
+            {
+                existingParticipant.CompanyName = dto.CompanyName;
+                existingParticipant.RegistrationCode = dto.RegistrationCode;
+                existingParticipant.NumberOfParticipants = dto.NumberOfParticipants;
+            }
 
             try
             {

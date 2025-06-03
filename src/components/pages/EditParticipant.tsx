@@ -95,6 +95,7 @@ export function EditParticipant() {
       console.log('Existing participant data:', existingParticipant);
 
       const updateData = {
+        type: participantData.type === 'individual' ? ParticipantType.Individual : ParticipantType.Company,
         firstName: participantData.type === 'individual' ? participantData.eesnimi : '',
         lastName: participantData.type === 'individual' ? participantData.perenimi : '',
         personalCode: participantData.type === 'individual' ? participantData.isikukood : '',

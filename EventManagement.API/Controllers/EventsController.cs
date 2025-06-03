@@ -34,7 +34,7 @@ namespace EventManagement.API.Controllers
                     e.EventDate,
                     e.Location,
                     e.AdditionalInfo,
-                    ParticipantCount = e.Participants.Count,
+                    ParticipantCount = e.Participants.Sum(p => p.Type == ParticipantType.Individual ? 1 : (p.NumberOfParticipants ?? 0)),
                     IsPastEvent = e.EventDate <= DateTime.UtcNow
                 })
                 .ToListAsync();
@@ -59,7 +59,7 @@ namespace EventManagement.API.Controllers
                         e.EventDate,
                         e.Location,
                         e.AdditionalInfo,
-                        ParticipantCount = e.Participants.Count,
+                        ParticipantCount = e.Participants.Sum(p => p.Type == ParticipantType.Individual ? 1 : (p.NumberOfParticipants ?? 0)),
                         IsPastEvent = e.EventDate <= DateTime.UtcNow,
                         Participants = e.Participants.Select(p => new
                         {
