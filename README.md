@@ -4,23 +4,29 @@
 - Docker
 - Visual Studio 2022 või Visual Studio Code
 
-### Käivita docker
+### PROJEKTI KÄIVITAMINE:
+
+1. Käivita docker
 ```bash
-docker-compose up --build
+docker-compose up -d --remove-orphans
 
 
-4. Käivita backend:
+2. Käivita backend:
 ```bash
-cd EventManagement.API
+cd EventManagement.API;
 dotnet run
 ```
 
-5. Käivita frontend:
+3. Käivita frontend:
+
 ```bash
-npm install
+npm install;
 npm run dev
 ```
-
+4. Rakendust saab kasutada:
+```bash
+http://localhost:5173/
+```
 ## Rakenduse Arhitektuur
 
 Rakendus koosneb kahest peamisest osast:
@@ -67,3 +73,20 @@ API dokumentatsioon on kättesaadav Swagger UI kaudu: https://localhost:5001/swa
 Peamised endpointid:
 - `/api/Events`: Ürituste haldamine
 - `/api/Participants`: Osalejate haldamine
+
+## Testimine
+
+### Backend Testid
+- Kasutab xUnit testiraamistikku
+- Testid asuvad `EventManagement.Tests` projektis
+- Käivita testid:
+```bash
+cd EventManagement.Tests;
+dotnet test
+```
+
+### Testide Kategooriad
+- **Ühiktestid**: Individuaalsete komponentide ja meetodite testid
+- **Integratsioonitestid**: API endpointide ja andmebaasi interaktsioonide testid
+- **E2E testid**: Kasutajaliidese ja süsteemi end-to-end testid
+
