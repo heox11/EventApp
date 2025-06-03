@@ -1,0 +1,44 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"  # Use HTTP only
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=guestregistration;User=guestuser;Password=GuestPass123!;Allow User Variables=True
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - guest-registration-network
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=guestregistration
+      - MYSQL_USER=guestuser
+      - MYSQL_PASSWORD=GuestPass123!
+      - MYSQL_ROOT_PASSWORD=RootPass123!
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - guest-registration-network
+
+volumes:
+  mysql-data:
+
+networks:
+  guest-registration-network:
+    driver: bridge
