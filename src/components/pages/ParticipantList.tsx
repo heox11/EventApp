@@ -297,6 +297,7 @@ export function ParticipantList() {
                 <p className="mt-2"><span className="font-medium">Toimumisaeg:</span> {new Date(event.eventDate).toLocaleDateString('et-EE')}</p>
                 <p className="mt-2"><span className="font-medium">Koht:</span> {event.location}</p>
                 <p className="mt-2"><span className="font-medium">Osavõtjate arv:</span> {event.participantCount}</p>
+                <p className="mt-2"><span className="font-medium">Lisainfo:</span> {event.additionalInfo}</p>
               </div>
             </div>
           </div>

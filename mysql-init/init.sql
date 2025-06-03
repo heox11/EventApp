@@ -31,11 +31,35 @@ CREATE TABLE IF NOT EXISTS `Participants` (
     CONSTRAINT `FK_Participants_Events` FOREIGN KEY (`EventId`) REFERENCES `Events`(`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert test event
+-- Insert test events
 INSERT INTO `Events` (`Name`, `EventDate`, `Location`, `AdditionalInfo`)
-VALUES (
-    'Test Event',
-    DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 DAY),
-    'Test Location',
-    'This is a test event'
-); 
+VALUES 
+    ('Tech Conference 2024', '2024-06-15 09:00:00', 'Tallinn Conference Center', 'Annual technology conference with workshops and networking'),
+    ('Summer Music Festival', '2024-07-20 14:00:00', 'Pirita Beach', 'Outdoor music festival with food vendors'),
+    ('Business Networking Event', '2024-08-10 18:00:00', 'Radisson Blu Hotel', 'Networking event for business professionals'),
+    ('Startup Pitch Competition', '2024-09-05 10:00:00', 'Tallinn Creative Hub', 'Annual startup competition with prizes');
+
+-- Insert participants for each event
+-- Tech Conference participants
+INSERT INTO `Participants` (`EventId`, `Type`, `FirstName`, `LastName`, `PersonalCode`, `CompanyName`, `RegistrationCode`, `NumberOfParticipants`, `PaymentMethod`, `AdditionalInfo`)
+VALUES 
+    (1, 0, 'John', 'Smith', '12345678901', '', 'TECH001', NULL, 0, 'Interested in AI workshops'),
+    (1, 1, '', '', '', 'TechCorp Estonia', 'TECH002', 3, 1, 'Team of developers attending');
+
+-- Summer Music Festival participants
+INSERT INTO `Participants` (`EventId`, `Type`, `FirstName`, `LastName`, `PersonalCode`, `CompanyName`, `RegistrationCode`, `NumberOfParticipants`, `PaymentMethod`, `AdditionalInfo`)
+VALUES 
+    (2, 0, 'Maria', 'Kask', '23456789012', '', 'MUSIC001', NULL, 0, 'VIP ticket holder'),
+    (2, 1, '', '', '', 'EventPro OÜ', 'MUSIC002', 5, 1, 'Event staff');
+
+-- Business Networking Event participants
+INSERT INTO `Participants` (`EventId`, `Type`, `FirstName`, `LastName`, `PersonalCode`, `CompanyName`, `RegistrationCode`, `NumberOfParticipants`, `PaymentMethod`, `AdditionalInfo`)
+VALUES 
+    (3, 0, 'Peter', 'Tamm', '34567890123', '', 'NET001', NULL, 0, 'Looking for business partners'),
+    (3, 1, '', '', '', 'Business Solutions Ltd', 'NET002', 2, 1, 'Company representatives');
+
+-- Startup Pitch Competition participants
+INSERT INTO `Participants` (`EventId`, `Type`, `FirstName`, `LastName`, `PersonalCode`, `CompanyName`, `RegistrationCode`, `NumberOfParticipants`, `PaymentMethod`, `AdditionalInfo`)
+VALUES 
+    (4, 0, 'Anna', 'Kallas', '45678901234', '', 'START001', NULL, 0, 'Pitching a new app'),
+    (4, 1, '', '', '', 'Innovation Hub', 'START002', 4, 1, 'Investors attending'); 

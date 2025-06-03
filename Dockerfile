@@ -5,6 +5,7 @@ WORKDIR /src
 # Copy solution file and project files correctly
 COPY EventRegistration.sln ./
 COPY EventManagement.API/ EventManagement.API/
+COPY EventManagement.API.Tests/ EventManagement.API.Tests/
 
 # Restore dependencies
 RUN dotnet restore EventRegistration.sln
