@@ -16,7 +16,6 @@ nupkg/
 
 # Node.js
 package-lock.json
-tsconfig.app.json
 node_modules/
 dist/
 dist-ssr/
